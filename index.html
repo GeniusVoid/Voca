@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Voca</title>
+<meta name="theme-color" content="#f5f3ec">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{--bg:#f5f3ec;--sf:#fff;--ink:#16161d;--shc:#16161d;--mut:#6a6a76;--blue:#2d5bff;--grn:#128a48;--red:#d12f3a;--on:#fff;--gs:#e1f5e9;--rs:#fbe4e5;--bs:#e6ecff;--dim:rgba(20,20,26,.5);--bw:2px;--r:12px;--sh:3px 3px 0 var(--shc);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#14151a;--sf:#1e2028;--ink:#ecedf2;--shc:#000;--mut:#9a9aa8;--blue:#6d8dff;--grn:#3ccf7d;--red:#ff6b74;--on:#0e0f14;--gs:#12301f;--rs:#3a1a1d;--bs:#1a2347;--dim:rgba(0,0,0,.6)}}
+:root[data-theme=dark]{--bg:#14151a;--sf:#1e2028;--ink:#ecedf2;--shc:#000;--mut:#9a9aa8;--blue:#6d8dff;--grn:#3ccf7d;--red:#ff6b74;--on:#0e0f14;--gs:#12301f;--rs:#3a1a1d;--bs:#1a2347;--dim:rgba(0,0,0,.6)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden}
+#app{height:100%;display:flex;flex-direction:column;max-width:560px;margin:0 auto}
+h1{font-size:28px;margin:4px 0 14px;font-weight:800;letter-spacing:-.5px}h2{font-size:20px;margin:0 0 8px}p{margin:0 0 10px}
+small{color:var(--mut);font-size:13px}
+.hd{display:flex;align-items:center;justify-content:space-between;padding:6px 10px 6px 16px;min-height:56px;border-bottom:var(--bw) solid var(--ink)}
+.lg{font-size:20px;font-weight:800;letter-spacing:-.3px}
+.ib{width:44px;height:44px;display:grid;place-items:center;background:none;border:0;color:var(--ink);border-radius:var(--r);cursor:pointer;flex:none}
+#mn{flex:1;overflow-y:auto;padding:16px;overscroll-behavior:contain}
+.nv{display:flex;border-top:var(--bw) solid var(--ink);background:var(--sf)}
+.nv button{flex:1;min-height:56px;border:0;background:none;color:var(--mut);display:grid;place-items:center;cursor:pointer}
+.nv .on{color:var(--blue);box-shadow:inset 0 3px 0 var(--blue)}
+.card{background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin-bottom:14px}
+.b{font:inherit;font-weight:700;min-height:44px;padding:0 18px;border:var(--bw) solid var(--ink);border-radius:var(--r);background:var(--sf);color:var(--ink);box-shadow:var(--sh);cursor:pointer}
+.b:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--shc)}
+.b.p{background:var(--blue);color:var(--on)}.b.w{width:100%;margin-top:14px}.b.g{border:0;box-shadow:none;background:none}.b.sm{min-height:32px;padding:0 10px;font-size:13px}
+.lk{background:none;border:0;color:var(--blue);font:inherit;font-weight:700;padding:8px 0;cursor:pointer;text-decoration:underline}
+.lb{display:block;font-weight:700;font-size:14px;margin:14px 0 6px}
+.inp{width:100%;font:inherit;font-size:16px;padding:10px 12px;min-height:44px;border:var(--bw) solid var(--ink);border-radius:var(--r);background:var(--sf);color:var(--ink)}
+textarea.inp{resize:vertical}
+.loc{display:flex;gap:6px;align-items:center}
+.seg{display:flex;border:var(--bw) solid var(--ink);border-radius:var(--r);overflow:hidden}
+.seg button{flex:1;min-height:44px;border:0;background:var(--sf);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.seg .on{background:var(--blue);color:var(--on)}
+.em{text-align:center;color:var(--mut);padding:28px 10px}.em .b{margin-top:12px;color:var(--ink)}
+.rw{display:flex;align-items:center;justify-content:space-between;gap:8px}.nm{font-size:18px}
+.tk{height:14px;border:var(--bw) solid var(--ink);border-radius:99px;background:var(--bs);margin:12px 0 6px;overflow:hidden}.tk i{display:block;height:100%;background:var(--blue)}
+.hs{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px 18px;padding:0 16px 8px}
+.sc{flex:0 0 84%;scroll-snap-align:start;margin:0 0 6px}.sc .b{width:100%;margin-top:12px;border-radius:99px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0 12px}
+.chip{min-height:40px;padding:0 14px;border:var(--bw) solid var(--ink);border-radius:99px;background:var(--sf);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}.chip.on{background:var(--blue);color:var(--on)}
+.rv{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-top:1px solid var(--mut)}
+.rv span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}
+.lab{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--red)}
+.row{display:flex;align-items:center;gap:10px;width:100%;min-height:52px;padding:6px 6px 6px 12px;background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);margin-bottom:10px;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.row .t{flex:1;min-width:0}.row .t span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-weight:600}
+.lr{display:flex;align-items:stretch;gap:6px;margin-bottom:10px}
+.ld{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.ch{transition:transform .2s}.ch.op{transform:rotate(180deg)}
+.tag{font-size:12px;font-weight:800;background:var(--bs);color:var(--blue);border:var(--bw) solid var(--blue);border-radius:99px;padding:0 8px}
+.row2{display:flex;justify-content:space-between;align-items:center;width:100%;font:inherit;color:var(--ink);text-align:left;cursor:pointer}
+.ok{color:var(--grn)}.no{color:var(--red)}
+.bd{position:fixed;inset:0;background:var(--dim);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.bd.sh{align-items:flex-end;padding:0}
+.pp{width:100%;max-width:420px;max-height:86dvh;overflow:auto;background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);padding:16px;animation:fi .18s}
+.sh .pp{max-width:560px;border-radius:var(--r) var(--r) 0 0;min-height:42dvh;animation:up .25s;padding-bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+@keyframes fi{from{opacity:0}}@keyframes up{from{transform:translateY(100%)}}
+.ac{display:flex;gap:10px;margin-top:14px;justify-content:flex-end;flex-wrap:wrap}
+.mh{display:flex;align-items:center;justify-content:space-between}
+.dimb{opacity:.45}
+.rw2{display:flex;justify-content:space-between;align-items:center;min-height:56px;border-bottom:1px solid var(--mut)}
+.tg{width:54px;height:30px;border:var(--bw) solid var(--ink);border-radius:99px;background:var(--bs);position:relative;cursor:pointer;padding:0}
+.tg i{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--ink);transition:transform .2s}
+.tg.on{background:var(--grn)}.tg.on i{transform:translateX(24px);background:var(--on)}
+.rd{border:var(--bw) solid var(--ink);border-radius:50%;width:44px}.rd.spin svg{animation:sp .5s}
+.sp{width:46px;height:46px;border:5px solid var(--bs);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite;margin:10px auto}
+@keyframes sp{to{transform:rotate(360deg)}}
+#nt{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:8px;right:8px;z-index:80;display:flex;flex-direction:column;gap:6px;align-items:center;pointer-events:none}
+.nt{pointer-events:auto;display:flex;align-items:center;gap:8px;max-width:520px;width:100%;padding:8px 12px;background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);font-size:13px;font-weight:600;animation:fi .2s}
+.nt.error{color:var(--red);border-color:var(--red)}.nt.ok{color:var(--grn)}.nt span{flex:1}
+.q{display:flex;flex-direction:column;height:100%}
+.pb{position:relative;height:32px;margin:6px 30px 12px}
+.pb .tr{position:absolute;left:0;right:0;top:11px;height:10px;margin:0}
+.ci{position:absolute;top:50%;transform:translate(-50%,-50%);height:24px;min-width:24px;padding:0 5px;border-radius:99px;background:var(--sf);border:var(--bw) solid var(--ink);display:grid;place-items:center;font-size:11px;font-weight:800;z-index:2}
+.ci.r{left:0;color:var(--red)}.ci.b{left:100%;color:var(--blue)}.ci.g{color:var(--grn);z-index:1;transition:left .45s ease;background:var(--gs)}
+.qb{display:flex;justify-content:space-between;gap:10px;padding:12px 16px;border-top:var(--bw) solid var(--ink);background:var(--sf)}
+.qb .b{flex:0 1 46%;min-width:110px}
+.qq{font-size:20px;font-weight:700;margin-bottom:16px}
+.op{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:52px;padding:10px 14px;margin-bottom:10px;border:var(--bw) solid var(--ink);border-radius:var(--r);background:var(--sf);color:var(--ink);font:inherit;text-align:left;box-shadow:var(--sh);cursor:pointer}
+.op.ok{background:var(--gs);color:var(--grn);border-color:var(--grn)}.op.no{background:var(--rs);color:var(--red);border-color:var(--red)}.op.dm{opacity:.45;box-shadow:none}
+.vd{display:flex;align-items:center;gap:6px;font-weight:800;margin:6px 0 10px}
+.bl{display:inline-block;min-width:90px;border-bottom:4px solid var(--ink);margin:0 4px;vertical-align:baseline;font-weight:800}.bl.f{border-color:currentColor}
+.fc{position:relative;min-height:240px;perspective:900px;cursor:pointer}
+.ff{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:18px;background:var(--sf);border:var(--bw) solid var(--ink);border-radius:var(--r);box-shadow:var(--sh);overflow:auto;backface-visibility:hidden;transition:transform .5s}
+.ff p{font-size:20px;font-weight:700;margin:6px 0 0}.ff.bk{transform:rotateX(180deg);background:var(--bs)}
+.fc.fl .ff{transform:rotateX(180deg)}.fc.fl .ff.bk{transform:none}
+.hint{text-align:center;color:var(--mut);font-size:13px;margin-top:12px}
+.st{display:flex;justify-content:space-around;margin:16px 0}.st b{display:block;font-size:28px}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style></head><body>
+<div id="app"></div><div id="md"></div><div id="nt"></div>
+<script>
+const VER="0.0.3",$=s=>document.querySelector(s),now=()=>Date.now(),sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ID=()=>{let s="";for(let i=0;i<10;i++)s+="abcdefghijklmnopqrstuvwxyz0123456789"[Math.random()*36|0];return s};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const spread=q=>{for(let i=1;i<q.length;i++)if(q[i].split(":")[0]===q[i-1].split(":")[0]){const j=q.findIndex((x,k)=>k>i&&x.split(":")[0]!==q[i-1].split(":")[0]);if(j>0)[q[i],q[j]]=[q[j],q[i]]}return q};
+const hash=c=>{let h=5381;const s=c.f+"\u0001"+c.b;for(let i=0;i<s.length;i++)h=(h*33^s.charCodeAt(i))>>>0;return h};
+/* icons: registry, set_1 */
+const IC={set_1:{home:'<path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',add:'<path d="M12 5v14M5 12h14"/>',library:'<rect x="3" y="4" width="5" height="16" rx="1"/><rect x="10" y="4" width="5" height="16" rx="1"/><path d="M17 6l3.6-1 2 14-3.6 1z"/>',learn:'<path d="M2 9l10-5 10 5-10 5z"/><path d="M6 11.5V16c0 1.5 3 3 6 3s6-1.5 6-3v-4.5"/>',settings:'<path d="M3 8h3M12 8h9M3 16h9M18 16h3"/><circle cx="9" cy="8" r="3"/><circle cx="15" cy="16" r="3"/>',back:'<path d="M15 5l-7 7 7 7"/>',cross:'<path d="M6 6l12 12M18 6L6 18"/>',chevron:'<path d="M6 9l6 6 6-6"/>',deck:'<path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>',card:'<rect x="4" y="6" width="16" height="12" rx="2"/><path d="M8 10h8M8 14h5"/>',error:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6M12 16.5v.5"/>',retry:'<path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v5h-5"/>',check:'<path d="M5 12.5l4.5 4.5L19 7"/>',dots:'<circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/>',eye:'<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',list:'<path d="M4 6h16M4 12h16M4 18h10"/>'}};
+const ic=(n,z=22)=>`<svg viewBox="0 0 24 24" width="${z}" height="${z}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${(IC[S.set.icons]||IC.set_1)[n]||""}</svg>`;
+/* storage */
+const DEF=()=>({sv:1,decks:{},cards:{},qs:{},items:{},rt:[],ses:{},set:{base:"",key:"",model:"",st:"",mcq:true,fill:false,fc:false,shuf:false,icons:"set_1",cp:false,cpm:false,prompt:""},ui:{tab:"home",lib:"primary",exp:{},at:"deck",hf:"mcq",d:{dl:"primary::",dn:"",cf:"",cb:""}}});
+let S=DEF(),memOnly=false,V={sc:{},quiz:null,sub:null,fin:null,typed:"",more:0},G={pending:new Set(),run:0,stop:0,qt:null},warned=false,st=null;
+try{const j=localStorage.getItem("voca");if(j){const o=JSON.parse(j),d=DEF();S={...d,...o,set:{...d.set,...o.set},ui:{...d.ui,...o.ui,d:{...d.ui.d,...(o.ui&&o.ui.d)}}}}}catch(e){memOnly=true}
+function save(){try{localStorage.setItem("voca",JSON.stringify(S))}catch(e){if(!warned){warned=true;note("Could not save. Storage may be full or blocked, so changes may be lost.","error")}}}
+const saveSoon=()=>{clearTimeout(st);st=setTimeout(save,400)};
+/* data helpers */
+const kids=p=>Object.values(S.decks).filter(d=>d.p===p).sort((a,b)=>a.n.localeCompare(b.n));
+const dcards=id=>Object.values(S.cards).filter(c=>c.d===id);
+function allCards(id){let r=dcards(id);kids(id).forEach(k=>r=r.concat(allCards(k.id)));return r}
+const path=id=>{const a=[];while(id&&id!=="primary"&&S.decks[id]){a.unshift(S.decks[id].n);id=S.decks[id].p}return "primary"+a.map(x=>"::"+x).join("")};
+function resolve(s){const p=s.split("::").map(x=>x.trim()).filter(Boolean);if(p[0]!=="primary")return null;let id="primary";for(const n of p.slice(1)){const k=kids(id).find(d=>d.n.toLowerCase()===n.toLowerCase());if(!k)return null;id=k.id}return id}
+const tree=(p="primary",dep=0)=>kids(p).flatMap(d=>[{id:d.id,dep},...tree(d.id,dep+1)]);
+const isDesc=(x,anc)=>{while(x&&x!=="primary"){if(x===anc)return true;x=S.decks[x]&&S.decks[x].p}return false};
+function nameErr(n,p,self){n=n.trim();if(!n)return "Type a deck name.";if(n.length>60)return "Name can’t be longer than 60 characters.";if(n.includes("::"))return "Name can’t contain “::”.";if(kids(p).some(d=>d.id!==self&&d.n.toLowerCase()===n.toLowerCase()))return "A deck with that name already exists there.";return ""}
+function delCard(id){delete S.cards[id];["mcq","fill_up","flashcard"].forEach(t=>{delete S.qs[id+":"+t];delete S.items[id+":"+t]});S.rt=S.rt.filter(r=>r.card!==id);for(const k in S.ses){const s=S.ses[k];s.queue=s.queue.filter(i=>i.split(":")[0]!==id);for(const i in s.res)if(i.split(":")[0]===id)delete s.res[i];if(!Object.keys(s.res).length)delete S.ses[k]}}
+function delDeck(id){const ids=[id,...tree(id).map(t=>t.id)];ids.forEach(d=>{dcards(d).forEach(c=>delCard(c.id));delete S.ses[d];delete S.decks[d]})}
+/* notifications + modal */
+const NT=[],safe=e=>String(e&&e.message||e).split(S.set.key||"\u0000").join("•••");
+function note(t,k="info",act){const n={id:ID(),t:String(t),k,act};NT.push(n);while(NT.length>3)NT.shift();drawN();setTimeout(()=>{if(!V.more)dropN(n.id)},6000)}
+function dropN(id){const i=NT.findIndex(n=>n.id===id);if(i>=0)NT.splice(i,1);drawN()}
+function drawN(){$("#nt").innerHTML=NT.map(n=>{const lg=n.k==="error"&&n.t.length>44;return `<div class="nt ${n.k}" data-a="ndrop" data-id="${n.id}">${ic(n.k==="error"?"error":n.k==="ok"?"check":"card",18)}<span>${esc(lg?n.t.slice(0,40)+"…":n.t)}</span>${lg?`<button class="b g sm" data-a="nmore" data-id="${n.id}">More</button>`:""}${n.act?`<button class="b g sm" data-a="nact" data-id="${n.id}">${esc(n.act.l)}</button>`:""}</div>`}).join("")}
+function modal(h,cls=""){$("#md").innerHTML=`<div class="bd ${cls}"><div class="pp">${h}</div></div>`}
+function mclose(){$("#md").innerHTML="";V.more=0;clearInterval(V.lt)}
+window.addEventListener("error",e=>note(safe(e.message),"error"));
+window.addEventListener("unhandledrejection",e=>note(safe(e.reason),"error"));
+/* history: back button never exits from a sub-screen */
+const guard=()=>{try{history.pushState({v:1},"")}catch(e){}};
+function backNav(){if($("#md").innerHTML){mclose();return true}if(V.quiz){V.quiz=null;V.fin=null;render();return true}if(V.sub){V.sub=null;render();return true}if(S.ui.tab==="library"&&S.ui.lib!=="primary"){const d=S.decks[S.ui.lib];S.ui.lib=d?d.p:"primary";save();render();return true}return false}
+addEventListener("popstate",()=>{if(backNav())guard()});
+/* ---------- screens ---------- */
+const TABS=[["home","Home"],["add","Add"],["library","Library"],["learn","Learn"]];
+const TK={mcq:"mcq",fill_up:"fill",flashcard:"fc"},types=()=>["mcq","fill_up","flashcard"].filter(t=>S.set[TK[t]]);
+const qTotal=s=>{const R=Object.values(s.res);if(s.kind==="review")return R.length;const cards=new Set(Object.keys(s.res).map(i=>i.split(":")[0]));const active=Math.max(1,types().length);return Math.max(R.length,cards.size*active)};
+const shell=b=>`<div class="hd"><b class="lg">Voca</b><button class="ib" aria-label="Settings" data-a="settings">${ic("settings")}</button></div><div id="mn">${b}</div><nav class="nv">${TABS.map(([k,l])=>`<button class="${S.ui.tab===k?"on":""}" aria-label="${l}" data-a="tab" data-k="${k}">${ic(k,24)}</button>`).join("")}</nav>`;
+const empty=(t,b,k)=>`<div class="em">${t}<br><button class="b" data-a="tab" data-k="${k}">${b}</button></div>`;
+function itemText(i){const c=S.cards[i.c];if(!c)return"";const q=S.qs[i.id];return i.t==="mcq"&&q&&q.q?q.q:i.t==="fill_up"&&q&&q.s?q.s:c.f}
+function homeH(){
+ const ss=Object.values(S.ses).sort((a,b)=>b.u-a.u);
+ let h=`<h1>You Left Here!</h1>`+(ss.length?`<div class="hs">${ss.map(s=>{const R=Object.values(s.res),t=qTotal(s),a=R.filter(r=>r==="correct"||r==="incorrect").length;return `<div class="card sc"><div class="rw"><b class="nm">${esc(s.title)}</b><button class="ib" aria-label="Menu" data-a="smenu" data-id="${s.id}">${ic("dots")}</button></div><div class="tk"><i style="width:${t?a/t*100:0}%"></i></div><small>${a}/${t} cards completed</small><button class="b p" data-a="cont" data-id="${s.id}">Continue</button></div>`}).join("")}</div>`:empty("Nothing left unfinished.","Go to Learn","learn"));
+ const f=S.ui.hf,its=Object.values(S.items).filter(i=>i.t===f&&(i.r==="incorrect"||i.r==="skipped")&&S.cards[i.c]).sort((a,b)=>b.at-a.at);
+ h+=`<h2>Review</h2><div class="chips">${[["mcq","MCQs"],["flashcard","Flashcards"],["fill_up","Fill ups"]].map(([k,l])=>`<button class="chip ${f===k?"on":""}" data-a="hf" data-k="${k}">${l}</button>`).join("")}</div><div class="card">`;
+ h+=its.length?its.slice(0,5).map(i=>`<div class="rv"><span>${esc(itemText(i))}</span><div><span class="lab" style="display:inline-flex;${i.r==="skipped"?"color:var(--mut)":""}">${ic(i.r==="skipped"?"list":"cross",14)}${i.r==="incorrect"?"Incorrect":"Unanswered"}</span> <small>${esc(S.decks[S.cards[i.c].d]?S.decks[S.cards[i.c].d].n:"")}</small></div></div>`).join("")+`<button class="b p w" data-a="rev">Review all (${its.length})</button>`:`<div class="em" style="padding:10px">Nothing to review. Nice.</div>`;
+ return h+`</div>`}
+function addH(){const D=S.ui.d,at=S.ui.at;
+ return `<div class="seg"><button class="${at==="deck"?"on":""}" data-a="atab" data-k="deck">Deck</button><button class="${at==="card"?"on":""}" data-a="atab" data-k="card">Card</button></div>
+ <label class="lb" for="dl">Location</label><div class="loc"><input id="dl" class="inp" list="dls" data-d="dl" value="${esc(D.dl)}" placeholder="primary::deck1" autocomplete="off" autocapitalize="off"><button class="ib" aria-label="Choose location" data-a="lpick">${ic("list")}</button></div><datalist id="dls">${tree().map(t=>`<option value="${esc(path(t.id))}">`).join("")}</datalist>`+
+ (at==="deck"?`<label class="lb" for="dn">Deck name</label><input id="dn" class="inp" data-d="dn" value="${esc(D.dn)}" placeholder="Deck name" maxlength="80"><button class="b p w" data-a="mkdeck">Save deck</button>`:
+ `<label class="lb" for="cf">Front</label><textarea id="cf" class="inp" rows="3" data-d="cf" placeholder="Front (the question)">${esc(D.cf)}</textarea><label class="lb" for="cb">Back</label><textarea id="cb" class="inp" rows="3" data-d="cb" placeholder="Back (the answer)">${esc(D.cb)}</textarea><button class="b p w" data-a="mkcard">Save card</button><button class="b w" data-a="imp">Import</button>`)}
+function libH(){
+ if(S.ui.lib!=="primary"&&!S.decks[S.ui.lib])S.ui.lib="primary";const id=S.ui.lib;let h="";
+ if(id!=="primary")h+=`<div class="rw" style="justify-content:flex-start;margin-bottom:10px"><button class="ib" aria-label="Back" data-a="back">${ic("back")}</button><b style="word-break:break-all">${esc(path(id))}</b></div>`;
+ const ks=kids(id),cs=dcards(id).sort((a,b)=>a.tc-b.tc);
+ h+=ks.map(d=>`<div class="row" data-a="odeck" data-id="${d.id}"><span style="color:var(--blue)">${ic("deck")}</span><div class="t"><b>${esc(d.n)}</b><br><small>${allCards(d.id).length} cards</small></div><button class="ib" aria-label="Deck actions" data-a="dmenu" data-id="${d.id}">${ic("dots")}</button></div>`).join("");
+ h+=cs.map(c=>`<div class="row" data-a="ocard" data-id="${c.id}"><span style="color:var(--mut)">${ic("card")}</span><div class="t"><span>${esc(c.f)}</span></div></div>`).join("");
+ if(!ks.length&&!cs.length)h+=empty(id==="primary"?"No decks yet.":"This deck is empty.","Go to Add","add");return h}
+function learnH(){
+ const rows=(p,dep)=>kids(p).map(d=>{const k=kids(d.id),op=S.ui.exp[d.id];return `<div class="lr" style="margin-left:${dep*14}px"><button class="ld" data-a="learn" data-id="${d.id}"><b>${esc(d.n)}</b><small>${allCards(d.id).length} cards</small>${S.ses[d.id]?'<span class="tag">Resume</span>':""}</button>${k.length?`<button class="ib ch ${op?"op":""}" aria-label="Show subdecks" data-a="exp" data-id="${d.id}">${ic("chevron")}</button>`:""}</div>${k.length&&op?rows(d.id,dep+1):""}`}).join("");
+ return `<h1>Learn? Select!</h1>`+(kids("primary").length?rows("primary",0):empty("No decks yet.","Go to Add","add"))}
+const aiReady=()=>!!(S.set.base.trim()&&S.set.model.trim());
+function setH(){const st=!aiReady()?["Not set up",""]:S.set.st==="ok"?["Connected","ok"]:S.set.st==="bad"?["Could not connect","no"]:["Not set up",""];
+ return `<div class="hd"><button class="ib" aria-label="Back" data-a="back">${ic("back")}</button><b class="lg">Settings</b><span style="width:44px"></span></div><div id="mn"><div class="card rw"><b>Version</b><span>${VER}</span></div><button class="card row2" data-a="aimo"><span><b>AI (BYOAI)</b><br><small class="${st[1]}">${st[0]}</small></span>${ic("chevron")}</button><h2 style="margin-top:18px">Experimental Features</h2><div class="card"><div class="rw2"><span><b>Enable Correct Progress Icon in Slider</b><br><small>Adds a green circle that moves with your progress and shows the number of correct answers.</small></span><button class="tg ${S.set.cp?"on":""}" role="switch" aria-checked="${!!S.set.cp}" aria-label="Enable Correct Progress Icon in Slider" data-a="expt" data-k="cp"><i></i></button></div><div class="rw2"><span><b>Enable Custom AI Prompt</b><br><small>Use your own general instructions when creating questions.</small></span><button class="tg ${S.set.cpm?"on":""}" role="switch" aria-checked="${!!S.set.cpm}" aria-label="Enable Custom AI Prompt" data-a="expt" data-k="cpm"><i></i></button></div><button class="row2" style="padding:12px 0;border:0;background:none;width:100%" data-a="promptedit"><span><b>Edit Internal Prompt</b><br><small>Add or change general instructions. Card data and the JSON format stay locked.</small></span>${ic("chevron")}</button></div><p style="text-align:center;color:var(--mut)">Made with love by Vibhor Kumar. <button class="lk" data-a="about">Know more...</button></p></div>`}
+/* ---------- quiz ---------- */
+function curItem(s){const id=s.queue[0];if(!id)return null;const[cid,t]=id.split(":"),c=S.cards[cid];
+ if(!c){s.queue.shift();delete s.res[id];return curItem(s)}
+ if(t!=="flashcard"&&!qOk(c,t)){if(G.pending.has(cid))return{id,c,t,wait:1};
+  const r=s.res[id];if(r!=="none"&&r!=="skipped")return{id,c,t:"flashcard"};
+  s.queue.shift();delete s.res[id];const f=cid+":flashcard";if(!(f in s.res)){s.res[f]="none";s.queue.unshift(f)}else s.queue=s.queue.filter(x=>x!==f).concat(0).slice(0,-1);return curItem(s)}
+ return{id,c,t}}
+function quizH(){
+ if(V.fin)return finH();const s=S.ses[V.quiz];if(!s)return"";const it=curItem(s);if(!it){finish(s);return finH()}
+ const R=Object.values(s.res),tot=qTotal(s),cor=R.filter(r=>r==="correct").length,ans=R.filter(r=>r==="correct"||r==="incorrect").length,red=R.filter(r=>r==="incorrect"||r==="skipped").length;
+ const big=Math.max(tot,cor,red)>9999,w=n=>`style="min-width:${24+6*(String(n).length-1)}px"`;
+ const pb=`<div class="pb"><div class="tk tr"><i style="width:${tot?ans/tot*100:0}%"></i></div>${big?"":`<span class="ci r" ${w(red)}>${red}</span>${S.set.cp?`<span class="ci g" ${w(cor)} style="left:${tot?ans/tot*100:0}%">${cor}</span>`:""}<span class="ci b" ${w(tot)}>${tot}</span>`}</div>`;
+ if(s.cur&&s.cur.id!==it.id)s.cur=null;const cu=s.cur,A=cu&&cu.ph==="a",q=S.qs[it.id],auto=A&&it.t==="mcq"&&cu.ok;let body="";
+ if(it.wait)body=`<div class="em"><div class="sp"></div>Creating this question…</div>`;
+ else if(it.t==="mcq"){body=`<div class="qq">${esc(q.q)}</div>`+q.o.map((o,i)=>{let cl="op";if(A){cl+=i===q.a?" ok":i===cu.pk?" no":" dm"}return `<button class="${cl}" data-a="qpick" data-i="${i}"><span>${esc(o)}</span>${A&&i===q.a?ic("check",20):A&&i===cu.pk?ic("cross",20):""}</button>`}).join("")+(A&&!cu.ok?`<div class="vd ${cu.ok?"ok":"no"}">${ic(cu.ok?"check":"cross")}${cu.ok?"Correct":"Wrong"}</div>`:"")}
+ else if(it.t==="fill_up"){const bl=A?`<span class="bl f ${cu.ok?"ok":"no"}">${esc(q.ans)}</span>`:`<span class="bl"></span>`;
+  body=`<div class="qq">${esc(q.s).replace("_____",bl)}</div>`+(A?`<div class="vd ${cu.ok?"ok":"no"}">${ic(cu.ok?"check":"cross")}${cu.ok?"Correct":"Wrong"}</div><p>Correct answer: <b>${esc(q.ans)}</b></p><p>You typed: <b>${esc(cu.typed||"(nothing)")}</b></p>${cu.ok?"":`<button class="b" data-a="mark">Mark as correct</button>`}`:`<label class="lb" for="fi">Your answer</label><input id="fi" class="inp" placeholder="Type the missing word" value="${esc(V.typed)}" autocomplete="off" autocapitalize="off"><button class="b p w" data-a="chk">Check</button>`)}
+ else body=`<div class="fc ${cu&&cu.fl?"fl":""}" data-a="flip"><div class="ff"><small>Front</small><p>${esc(it.c.f)}</p></div><div class="ff bk"><small>Back</small><p>${esc(it.c.b)||"(no back)"}</p></div></div><p class="hint">Tap or swipe up to flip</p>`+(A?`<div class="vd ${cu.ok?"ok":"no"}">${ic(cu.ok?"check":"cross")}${cu.ok?"Correct":"Wrong"}</div>`:"");
+ const bot=it.wait||auto?"":A?`${cu.ok?"<span></span>":`<button class="b" data-a="retest">Re-test</button>`}<button class="b p" data-a="next">Next</button>`:`<button class="b" data-a="dk">Don’t Know</button>${it.t==="flashcard"?`<button class="b p" data-a="know">Know</button>`:`<button class="b" data-a="skip">Skip</button>`}`;
+ return `<div class="q"><div class="hd" style="border:0"><button class="ib" aria-label="Leave quiz" data-a="qx">${ic("cross")}</button><b class="lg">${esc(s.title)}</b><button class="ib" aria-label="Quiz settings" data-a="qset">${ic("settings")}</button></div>${pb}<div id="mn">${body}</div>${bot?`<div class="qb">${bot}</div>`:""}</div>`}
+function finH(){const f=V.fin;return `<div class="q"><div class="hd" style="border:0"><button class="ib" aria-label="Close" data-a="qx">${ic("cross")}</button><b class="lg">${esc(f.t)}</b><span style="width:44px"></span></div><div id="mn"><h1 style="text-align:center">Done</h1><div class="st"><div><b class="ok">${f.cor}</b>correct</div><div><b class="no">${f.inc}</b>incorrect</div><div><b>${f.dl>0?"+":""}${f.dl}</b>score</div></div>${f.w?`<p style="text-align:center"><small>${f.w} re-tests will be waiting next time you open this deck.</small></p>`:""}${f.wrong.length?`<button class="b p w" data-a="prac">Practice the wrong ones</button>`:""}<button class="b w" data-a="qx">Back to Learn</button></div></div>`}
+function finish(s){const R=Object.entries(s.res),cs=new Set(R.map(([i])=>i.split(":")[0]));V.fin={t:s.title,cor:R.filter(r=>r[1]==="correct").length,inc:R.filter(r=>r[1]==="incorrect").length,dl:s.dl||0,w:S.rt.filter(r=>cs.has(r.card)).length,wrong:R.filter(r=>r[1]==="incorrect").map(r=>r[0])};delete S.ses[V.quiz];save()}
+function sheetH(){return `<div class="rw2"><b>Shuffle Cards</b><button class="ib rd" aria-label="Shuffle remaining" data-a="shuf">${ic("retry")}</button></div>`+[["mcq","MCQs"],["fill_up","Fill Ups"],["flashcard","Flashcards"]].map(([t,l])=>`<div class="rw2"><b>${l}</b><button class="tg ${S.set[TK[t]]?"on":""}" role="switch" aria-checked="${!!S.set[TK[t]]}" aria-label="${l}" data-a="tg" data-k="${t}"><i></i></button></div>`).join("")}
+/* render */
+function render(){const root=$("#app");try{const o=$("#mn");if(o&&V.k)V.sc[V.k]=o.scrollTop;
+ V.k=V.quiz?"q":V.sub?"s":S.ui.tab+(S.ui.tab==="library"?S.ui.lib:"");
+ root.innerHTML=V.quiz?quizH():V.sub?setH():shell({home:homeH,add:addH,library:libH,learn:learnH}[S.ui.tab]());
+ const m=$("#mn");if(m&&!V.quiz)m.scrollTop=V.sc[V.k]||0}
+ catch(e){note(safe(e),"error");root.innerHTML=`<div class="em">Something went wrong on this screen.<br><button class="b" data-a="reset">Reload screen</button></div>`}}
+/* ---------- questions (BYOAI) ---------- */
+const qOk=(c,t)=>{const r=S.qs[c.id+":"+t];return!!r&&r.src===hash(c)&&r.st==="ok"};
+const aiSkipped=c=>{const r=S.qs[c.id+":mcq"];return!!r&&r.src===hash(c)&&r.st==="sk"};
+const eligible=c=>c.b&&c.f.length<=600&&c.b.length<=600;
+const needQ=c=>eligible(c)&&!qOk(c,"mcq")&&!qOk(c,"fill_up")&&!aiSkipped(c)&&!G.pending.has(c.id);
+const isLocal=u=>/^https?:\/\/(localhost|127\.|0\.0\.0\.0|\[::1\]|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|[^/:]+\.local)/i.test(u);
+const base=()=>{let b=S.set.base.trim().replace(/\/+$/,"");if(b&&!/^https?:\/\//i.test(b))b=(isLocal("http://"+b)?"http://":"https://")+b;return b};
+function errMsg(e){if(e&&e.status){if(e.status===401||e.status===403)return "The AI provider rejected the API key (error "+e.status+"). Check the key.";if(e.status===404)return "The AI provider returned 404. Check the base URL.";return "The AI provider returned error "+e.status+"."}
+ if(e&&e.name==="AbortError")return "The AI took too long to answer. Try again, or use a smaller or faster model.";if(e&&e.name==="TypeError")return "Could not reach the AI. Check the base URL, your internet and that the provider allows browser requests."+(isLocal(base())?" For a local model, make sure its server is running and allows this page’s origin (Ollama: set OLLAMA_ORIGINS=*; LM Studio: turn on CORS). An https page can only reach http://localhost, not a plain-http network address.":"");return safe(e)}
+const SYS_BASE=`You turn flashcards into quiz questions.
+
+You receive:
+- "cards": flashcards to turn into questions. Each has id, front, back.
+- "context_cards" (optional): other cards from the same deck. Use them ONLY as inspiration for wrong answers. Never make questions from them.
+
+For EACH card in "cards", produce one multiple-choice question and one fill-in-the-blank question.
+
+Rules for all questions:
+- Use ONLY facts stated in the card (front and back). Never add outside facts.
+- Write in the same language as the card.
+- Never reveal the answer inside the question text.
+- If the card is too vague, or has no single clear fact to test, return "skip": true with a short reason, and leave the question fields empty.
+
+MCQ:
+- "question": ask about the card's fact. Clear, no trick wording.
+- "correct": the single correct answer.
+- "distractors": exactly 3 wrong answers. Plausible, same type and category as the correct answer, similar length and style, distinct from each other and from the correct answer. Never "all of the above" or "none of the above". None of them may also be correct.
+- Do NOT put the correct answer in a special position and do NOT shuffle. The app shuffles.
+
+Fill-in-the-blank:
+- "sentence": one sentence built from the card, with exactly one blank written as _____ in place of the key term. It must have one unambiguous answer.
+- "answer": the missing word or short phrase (1-3 words).
+- "alt_answers": other spellings or synonyms that are equally correct (empty list if none).`;
+const SYS_FORMAT=`Return ONLY valid JSON. No markdown, no code fences, no comments. Format:
+{"questions":[{"card_id":"","skip":false,"reason":"","mcq":{"question":"","correct":"","distractors":["","",""]},"fill_up":{"sentence":"","answer":"","alt_answers":[]}}]}
+Return one entry per input card, in the same order, with the same card_id.`;
+const SYS_GUARD=`MANDATORY RULES (these override any instructions above):
+- Process every card in "cards". Return exactly one entry per input card, in the same order, with the same card_id. Never merge, skip, limit, add, or invent cards.
+- Use only the card data supplied in "cards". Never use outside facts.
+- Return only the required JSON format, with no extra text.`;
+const sysPrompt=()=>{const c=(S.set.prompt||"").trim();const base=S.set.cpm&&c?c:SYS_BASE;return base+"\n\n"+SYS_GUARD+"\n\n"+SYS_FORMAT};
+async function callAI(b,ctx){let json=true;
+ for(let at=0;at<3;at++){const ctl=new AbortController(),to=setTimeout(()=>ctl.abort(),isLocal(base())?300000:60000);
+  try{const r=await fetch(base()+"/chat/completions",{method:"POST",headers:{...(S.set.key?{Authorization:"Bearer "+S.set.key}:{}),"Content-Type":"application/json"},signal:ctl.signal,body:JSON.stringify({model:S.set.model,temperature:.4,stream:false,...(json?{response_format:{type:"json_object"}}:{}),messages:[{role:"system",content:sysPrompt()},{role:"user",content:JSON.stringify({cards:b.map(c=>({id:c.id,front:c.f,back:c.b})),context_cards:ctx})}]})});
+   if(!r.ok){const e=new Error("http");e.status=r.status;if(r.status===400&&json){json=false;at--;continue}throw e}
+   const j=await r.json(),m=j&&j.choices&&j.choices[0]&&j.choices[0].message;if(!m||typeof m.content!=="string")throw new Error("The AI answered in an unexpected format.");return m.content}
+  catch(e){if(e.name==="AbortError"||(e.status&&e.status!==429&&e.status<500)||at===2)throw e;await sleep(e.status===429?3000:1000)}finally{clearTimeout(to)}}}
+function parseQ(t){t=String(t).replace(/<think>[\s\S]*?<\/think>/g,"").replace(/```(?:json)?/g,"");let j;try{j=JSON.parse(t.slice(t.indexOf("{"),t.lastIndexOf("}")+1))}catch(e){j=JSON.parse(t.slice(t.indexOf("["),t.lastIndexOf("]")+1))}return Array.isArray(j)?j:Array.isArray(j.questions)?j.questions:[]}
+function store(c,q){if(!q||q.card_id!==c.id)return false;const h=hash(c);if(q.skip){["mcq","fill_up"].forEach(t=>S.qs[c.id+":"+t]={src:h,st:"sk"});return true}let ok=0;
+ const m=q.mcq;if(m&&m.question&&m.correct&&Array.isArray(m.distractors)&&m.distractors.length===3){const all=[m.correct,...m.distractors].map(x=>String(x).trim()),k=all.map(x=>x.toLowerCase().replace(/\s+/g,""));
+  if(all.every(x=>x&&x.length<200)&&new Set(k).size===4&&!(all[0].length>=4&&String(m.question).toLowerCase().includes(all[0].toLowerCase()))){const o=shuf(all);S.qs[c.id+":mcq"]={src:h,st:"ok",q:String(m.question).trim(),o,a:o.indexOf(all[0])};ok++}}
+ const f=q.fill_up;if(f&&f.sentence&&f.answer){const s=String(f.sentence).replace(/_{3,}/g,"_____"),an=String(f.answer).trim();
+  if((s.match(/_____/g)||[]).length===1&&an&&!s.toLowerCase().includes(an.toLowerCase())){S.qs[c.id+":fill_up"]={src:h,st:"ok",s,ans:an,alt:(Array.isArray(f.alt_answers)?f.alt_answers:[]).map(String)};ok++}}
+ return ok>0}
+async function batch(b){const ids=new Set(b.map(c=>c.id));let pool=allCards(b[0].d).filter(c=>!ids.has(c.id));
+ if(pool.length<3){const p=S.decks[b[0].d]&&S.decks[b[0].d].p;if(p&&p!=="primary")pool=allCards(p).filter(c=>!ids.has(c.id))}
+ const ctx=shuf(pool).slice(0,4).map(c=>({front:c.f.slice(0,300),back:c.b.slice(0,300)}));
+ const out=parseQ(await callAI(b,ctx));let bad=b.filter((c,i)=>!store(c,out.find(x=>x.card_id===c.id)||(out.length===b.length&&out[i]?{...out[i],card_id:c.id}:null)));
+ for(const c of bad.slice()){try{if((o=>store(c,o.find(x=>x.card_id===c.id)||(o.length===1&&o[0]?{...o[0],card_id:c.id}:null)))(parseQ(await callAI([c],[]))))bad=bad.filter(x=>x!==c)}catch(e){}}
+ return bad.length}
+async function gen(cards,first){const my=++G.run;cards.forEach(c=>G.pending.add(c.id));let bad=0,err=0;
+ for(let i=0;i<cards.length;i+=8){const b=cards.slice(i,i+8);
+  if(my<=G.stop){b.forEach(c=>G.pending.delete(c.id));continue}
+  try{bad+=await batch(b);S.set.st="ok"}catch(e){bad+=b.length;err++;S.set.st="bad";note(errMsg(e),"error");
+   if(i===0){cards.forEach(c=>G.pending.delete(c.id));save();if(first)first();return}}
+  b.forEach(c=>G.pending.delete(c.id));save();if(first){first();first=null}else if(V.quiz)render()}
+ if(bad&&!err)note(bad+" cards are shown as flashcards.");if(V.quiz)render()}
+const bgGen=cs=>{const n=cs.filter(needQ);if(n.length&&aiReady())gen(n)};
+/* ---------- sessions ---------- */
+function pullRetest(s,all){const cs=new Set(Object.keys(s.res).map(i=>i.split(":")[0]));const due=S.rt.filter(r=>r.due<=now()&&cs.has(r.card)&&S.cards[r.card]).sort((a,b)=>a.due-b.due);
+ (all?due.reverse():due.slice(0,1)).forEach(r=>{s.queue=s.queue.filter(i=>i!==r.item);s.queue.unshift(r.item)});return due.length>0}
+async function newSession(key,cards,title,kind,ids){mclose();let T=types();
+ if(!ids&&(T.includes("mcq")||T.includes("fill_up"))){const need=cards.filter(needQ);
+  if(need.length){if(!aiReady())note("AI isn’t set up yet. Showing flashcards.","error",{l:"Open settings",f:()=>{V.sub="settings";V.quiz=null;guard();render()}});
+   else{const myRun=G.run+1;let fr;const fp=new Promise(r=>fr=r);V.fr=fr;gen(need,fr).then(()=>fr());
+    const msgs=["Connecting...","Sorting out questions...","Creating questions...","Checking the options...","Almost there..."];let mi=0;
+    modal(`<div class="em" style="padding:10px"><div class="sp" role="status"></div><p id="lm">${msgs[0]}</p><button class="b" data-a="cancel">Cancel</button></div>`);V.lt=setInterval(()=>{const e=$("#lm");if(e)e.textContent=msgs[++mi%msgs.length]},2500);
+    await fp;mclose();if(G.stop>=myRun)return}}}
+ let queue;const res={};
+ if(ids){queue=ids.slice();queue.forEach(i=>res[i]="none")}
+ else{queue=[];["mcq","fill_up","flashcard"].filter(t=>T.includes(t)).forEach(t=>cards.forEach(c=>{const i=c.id+":"+t;queue.push(i);res[i]="none"}));if(S.set.shuf)queue=spread(shuf(queue))}
+ const s={id:key,kind,title,deck:key,c:now(),u:now(),queue,res,dl:0,cur:null};pullRetest(s,true);S.ses[key]=s;save();openQuiz(key)}
+function openQuiz(key){V.quiz=key;V.fin=null;V.typed="";guard();const s=S.ses[key];bgGen([...new Set(s.queue.filter(i=>!i.endsWith(":flashcard")).map(i=>S.cards[i.split(":")[0]]).filter(Boolean))]);render()}
+function startDeck(id){const cs=allCards(id);if(!cs.length)return note("This deck has no cards yet.");
+ if(S.ses[id])return modal(`<h2>${esc(S.decks[id].n)}</h2><p>You have an unfinished session.</p><div class="ac"><button class="b" data-a="over" data-id="${id}">Start over</button><button class="b p" data-a="cont" data-id="${id}">Resume</button></div>`);
+ newSession(id,cs,S.decks[id].n,"deck")}
+function ans(ok,x={}){const s=S.ses[V.quiz],it=s&&curItem(s);if(!it||it.wait||(s.cur&&s.cur.ph==="a"))return false;
+ if(ok){it.c.cs+=.5;s.dl+=.5}else{it.c.ws-=1;s.dl-=1}
+ S.items[it.id]={id:it.id,t:it.id.split(":")[1],c:it.c.id,r:ok?"correct":"incorrect",at:now()};if(it.id in s.res)s.res[it.id]=ok?"correct":"incorrect";
+ S.rt=S.rt.filter(r=>r.item!==it.id);s.cur={id:it.id,ph:"a",ok,fl:1,...x};s.u=now();save();render();return true}
+function next(){clearTimeout(G.qt);const s=S.ses[V.quiz];if(!s)return;s.queue.shift();s.cur=null;V.typed="";s.u=now();pullRetest(s,false);if(!s.queue.length)finish(s);save();render()}
+/* fill-up check */
+const cl=s=>s.toLowerCase().replace(/\s+/g,"").replace(/^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu,"");
+const lev=(a,b)=>{const d=Array.from({length:b.length+1},(_,i)=>i);for(let i=1;i<=a.length;i++){let p=d[0];d[0]=i;for(let j=1;j<=b.length;j++){const t=d[j];d[j]=Math.min(d[j]+1,d[j-1]+1,p+(a[i-1]===b[j-1]?0:1));p=t}}return d[b.length]};
+const chk=(t,q)=>{const x=cl(t);return[q.ans,...q.alt].some(a=>{const y=cl(a);if(x===y)return true;if(/\d/.test(x+y))return false;const l=y.length;return lev(x,y)<=(l<=3?0:l<=8?1:2)})};
+/* ---------- AI settings ---------- */
+let ft=null;
+async function fetchModels(){if(!S.set.base.trim())return note("Enter the base URL first.","error");const box=$("#ms");if(box)box.innerHTML=`<div class="sp"></div>`;
+ try{const H=S.set.key?{headers:{Authorization:"Bearer "+S.set.key}}:{};let r=await fetch(base()+"/models",H);if(r.status===404&&/^https?:\/\/[^/]+$/.test(base())){const r2=await fetch(base()+"/v1/models",H);if(r2.ok){S.set.base=base()+"/v1";const bi=$("#ub");if(bi)bi.value=S.set.base;r=r2}}if(!r.ok){const e=new Error("http");e.status=r.status;throw e}
+  const j=await r.json();V.models=(j.data||j.models||[]).map(m=>m.id||m.name||m).filter(x=>typeof x==="string").sort();S.set.st="ok";if(!V.models.length)V.manual=true;save();modelBox()}
+ catch(e){S.set.st="bad";V.manual=true;save();modelBox();note(errMsg(e),"error")}}
+function modelBox(){const b=$("#ms");if(!b)return;const ms=V.models||[],cur=S.set.model;
+ b.innerHTML=V.manual?`<input id="um" class="inp" data-u="model" value="${esc(cur)}" placeholder="Model name, e.g. gpt-4o-mini">`:ms.length?`<select id="um" class="inp" data-u="model">${(cur&&!ms.includes(cur)?[cur]:[]).concat(ms).map(m=>`<option ${m===cur?"selected":""}>${esc(m)}</option>`).join("")}</select>${cur&&!ms.includes(cur)?`<small class="no">Saved model isn’t in the fetched list.</small>`:""}`:`<select class="inp" disabled><option>${cur?esc(cur):"Fetch models first"}</option></select>`}
+/* ---------- actions ---------- */
+const A={
+tab(e){S.ui.tab=e.dataset.k;save();render()},settings(){V.sub="settings";guard();render()},back(){backNav()},
+atab(e){S.ui.at=e.dataset.k;save();render()},
+mkdeck(){const D=S.ui.d,p=resolve(D.dl);if(!p)return note("That location doesn’t exist.","error");const er=nameErr(D.dn,p);if(er)return note(er,"error");
+ const id=ID(),t=now();S.decks[id]={id,n:D.dn.trim(),p,tc:t,te:t};D.dn="";save();render();note("Deck created","ok")},
+mkcard(){const D=S.ui.d,d=resolve(D.dl);if(!d||d==="primary")return note("Create that deck first in the Deck tab.","error");if(!D.cf.trim())return note("Type the front of the card.","error");
+ const id=ID(),t=now();S.cards[id]={id,f:D.cf.trim(),b:D.cb.trim(),d,cs:0,ws:0,tc:t,te:t};D.cf=D.cb="";save();render();note("Card added","ok")},
+lpick(){modal(`<h2>Choose location</h2>${["primary",...tree().map(t=>t.id)].map((id,i)=>{const dep=id==="primary"?0:tree().find(t=>t.id===id).dep+1;return `<button class="row" style="margin-left:${dep*14}px;width:calc(100% - ${dep*14}px)" data-a="setloc" data-id="${id}"><span>${ic("deck")}</span><div class="t"><b>${id==="primary"?"primary":esc(S.decks[id].n)}</b></div></button>`}).join("")}<div class="ac"><button class="b" data-a="mclose">Close</button></div>`)},
+setloc(e){S.ui.d.dl=path(e.dataset.id)+(e.dataset.id==="primary"?"::":"");mclose();save();render()},
+mclose,
+imp(){const d=resolve(S.ui.d.dl);if(!d||d==="primary")return note("Choose an existing deck as the location first.","error");V.imp={d,rows:[]};
+ modal(`<h2>Import cards</h2><small>One card per line: front and back separated by a tab, comma or semicolon.</small><label class="lb" for="it">Paste text</label><textarea id="it" class="inp" rows="6" placeholder="front, back"></textarea><label class="lb" for="if">Or choose a CSV file</label><input id="if" type="file" accept=".csv,.txt,text/csv,text/plain"><p id="ip" style="margin-top:10px"></p><div class="ac"><button class="b" data-a="mclose">Close</button><button id="ib" class="b p dimb" data-a="impgo">Import</button></div>`)},
+impgo(){const v=V.imp;if(!v||!v.rows.length)return;const t=now();v.rows.forEach(([f,b],i)=>{const id=ID();S.cards[id]={id,f,b,d:v.d,cs:0,ws:0,tc:t+i,te:t+i}});save();mclose();render();note(v.rows.length+" cards imported","ok")},
+odeck(e){S.ui.lib=e.dataset.id;save();guard();render()},
+dmenu(e){const id=e.dataset.id,d=S.decks[id];modal(`<h2>${esc(d.n)}</h2><button class="row" data-a="dren" data-id="${id}"><b>Rename</b></button><button class="row" data-a="dmove" data-id="${id}"><b>Move</b></button><button class="row no" data-a="ddel" data-id="${id}"><b>Delete</b></button><div class="ac"><button class="b" data-a="mclose">Close</button></div>`)},
+dren(e){const id=e.dataset.id;modal(`<h2>Rename deck</h2><label class="lb" for="rn">Deck name</label><input id="rn" class="inp" value="${esc(S.decks[id].n)}" placeholder="Deck name"><div class="ac"><button class="b" data-a="mclose">Cancel</button><button class="b p" data-a="rensave" data-id="${id}">Save</button></div>`)},
+rensave(e){const id=e.dataset.id,n=$("#rn").value,er=nameErr(n,S.decks[id].p,id);if(er)return note(er,"error");S.decks[id].n=n.trim();S.decks[id].te=now();save();mclose();render()},
+dmove(e){const id=e.dataset.id;modal(`<h2>Move to</h2>${["primary",...tree().filter(t=>t.id!==id&&!isDesc(t.id,id)).map(t=>t.id)].map(p=>`<button class="row" data-a="moveto" data-id="${id}" data-p="${p}"><span>${ic("deck")}</span><div class="t"><b>${esc(path(p))}</b></div></button>`).join("")}<div class="ac"><button class="b" data-a="mclose">Cancel</button></div>`)},
+moveto(e){const id=e.dataset.id,p=e.dataset.p,er=nameErr(S.decks[id].n,p,id);if(er)return note(er,"error");S.decks[id].p=p;S.decks[id].te=now();save();mclose();render();note("Deck moved","ok")},
+ddel(e){const id=e.dataset.id;if(e.dataset.s==="1"){delDeck(id);save();mclose();render();return note("Deck deleted","ok")}e.dataset.s="1";e.innerHTML=`<b>Sure? ${allCards(id).length} cards will go.</b>`;setTimeout(()=>{if(e.isConnected){e.dataset.s="";e.innerHTML="<b>Delete</b>"}},3000)},
+ocard(e){cardM(e.dataset.id,false)},cview(e){cardM(e.dataset.id,false)},cedit(e){cardM(e.dataset.id,true)},
+cdel(e){const id=e.dataset.id;if(e.dataset.s==="1"){delCard(id);save();mclose();render();return note("Card deleted","ok")}e.dataset.s="1";e.textContent="Sure?";setTimeout(()=>{if(e.isConnected){e.dataset.s="";e.textContent="Delete"}},3000)},
+csave(e){const c=S.cards[e.dataset.id],f=$("#cef").value.trim(),b=$("#ceb").value.trim();if(!f)return note("The front can’t be empty.","error");if(f===c.f&&b===c.b)return;
+ c.f=f;c.b=b;c.te=now();["mcq","fill_up"].forEach(t=>delete S.qs[c.id+":"+t]);["mcq","fill_up","flashcard"].forEach(t=>delete S.items[c.id+":"+t]);save();mclose();render();note("Card saved","ok")},
+learn(e){startDeck(e.dataset.id)},exp(e){S.ui.exp[e.dataset.id]=!S.ui.exp[e.dataset.id];save();render()},
+cont(e){mclose();if(S.ses[e.dataset.id])openQuiz(e.dataset.id)},over(e){delete S.ses[e.dataset.id];save();mclose();startDeck(e.dataset.id)},
+smenu(e){modal(`<h2>${esc(S.ses[e.dataset.id].title)}</h2><button class="row no" data-a="restart" data-id="${e.dataset.id}"><b>Restart</b></button><div class="ac"><button class="b" data-a="mclose">Close</button></div>`)},
+restart(e){delete S.ses[e.dataset.id];save();mclose();render()},
+hf(e){S.ui.hf=e.dataset.k;save();render()},
+rev(){const f=S.ui.hf,its=Object.values(S.items).filter(i=>i.t===f&&(i.r==="incorrect"||i.r==="skipped")&&S.cards[i.c]).sort((a,b)=>b.at-a.at);if(!its.length)return;newSession("review",its.map(i=>S.cards[i.c]),"Review","review",its.map(i=>i.id))},
+qx(){V.quiz=null;V.fin=null;if(S.ui.tab==="home"&&false)0;render()},
+qset(){modal(sheetH(),"sh")},
+expt(e){S.set[e.dataset.k]=!S.set[e.dataset.k];save();render()},
+promptedit(){const cur=(S.set.prompt||"").trim()||SYS_BASE;modal(`<div class="mh"><button class="ib" aria-label="Back" data-a="mclose">${ic("back")}</button><b>Internal Prompt</b><span style="width:44px"></span></div><p><small>These general instructions are sent to the AI before your cards. The card list and the required JSON output are added automatically and can’t be changed here, so decks can’t be skipped or limited.</small></p><label class="lb" for="pr">General instructions</label><textarea id="pr" class="inp" rows="14" style="font-size:14px;line-height:1.5">${esc(cur)}</textarea><div class="ac"><button class="b" data-a="promptreset">Reset</button><button class="b p" data-a="promptsave">Save</button></div>`)},
+promptsave(){const el=$("#pr");if(el)S.set.prompt=el.value.trim();save();mclose();render();note("Prompt saved","ok")},
+promptreset(){const el=$("#pr");if(el)el.value=SYS_BASE},
+tg(e){const t=e.dataset.k,k=TK[t],on=!S.set[k];if(!on&&types().length===1)return note("At least one question type must stay on.");S.set[k]=on;const s=S.ses[V.quiz];
+ if(s){if(!on){s.queue=s.queue.filter((i,n)=>{const del=i.endsWith(":"+t)&&(s.res[i]==="none"||s.res[i]==="skipped")&&!(n===0&&s.cur);if(del)delete s.res[i];return!del})}
+  else{const cs=[...new Set([...Object.keys(s.res),...s.queue].map(i=>i.split(":")[0]))].filter(c=>S.cards[c]);cs.forEach(c=>{const i=c+":"+t;if(!(i in s.res)){s.res[i]="none";s.queue.push(i)}});if(t!=="flashcard")bgGen(cs.map(c=>S.cards[c]))}
+  s.u=now()}save();$(".pp").innerHTML=sheetH();render()},
+shuf(e){const s=S.ses[V.quiz];if(!s)return;const keep=s.cur?s.queue.slice(0,1):[],rest=s.queue.slice(keep.length);s.queue=keep.concat(spread(shuf(rest)));save();e.classList.remove("spin");void e.offsetWidth;e.classList.add("spin");render();$(".bd")&&0},
+qpick(e){const s=S.ses[V.quiz],it=s&&curItem(s);if(!it||it.wait||(s.cur&&s.cur.ph==="a"))return;const i=+e.dataset.i,q=S.qs[it.id],ok=i===q.a;if(ans(ok,{pk:i})&&ok){const id=it.id;clearTimeout(G.qt);G.qt=setTimeout(()=>{if(V.quiz&&S.ses[V.quiz]===s&&s.cur&&s.cur.id===id&&s.cur.ph==="a")next()},870)}},
+dk(){const s=S.ses[V.quiz],it=s&&curItem(s);if(!it||it.wait)return;ans(false,{pk:-1,typed:""})},
+skip(){const s=S.ses[V.quiz],it=s&&curItem(s);if(!it||it.wait)return;const p=S.items[it.id];if(!p||p.r==="none")S.items[it.id]={id:it.id,t:it.id.split(":")[1],c:it.c.id,r:"skipped",at:now()};if(s.res[it.id]==="none")s.res[it.id]="skipped";s.queue.push(s.queue.shift());V.typed="";s.u=now();save();render()},
+know(){if(ans(true))next()},
+flip(){const s=S.ses[V.quiz];if(!s)return;s.cur=s.cur&&s.cur.id===s.queue[0]?s.cur:{id:s.queue[0],ph:"q"};s.cur.fl=!s.cur.fl;save();$(".fc")&&$(".fc").classList.toggle("fl",!!s.cur.fl)},
+chk(){const s=S.ses[V.quiz],it=s&&curItem(s),v=($("#fi")||{}).value||"";if(!it||!v.trim())return;ans(chk(v,S.qs[it.id]),{typed:v})},
+mark(){const s=S.ses[V.quiz];if(!s||!s.cur||s.cur.ok)return;const c=S.cards[s.cur.id.split(":")[0]];c.ws+=1;c.cs+=.5;s.dl+=1.5;if(s.cur.id in s.res)s.res[s.cur.id]="correct";S.items[s.cur.id].r="correct";s.cur.ok=true;save();render()},
+next,retest(){const s=S.ses[V.quiz];if(!s||!s.cur)return;S.rt.push({item:s.cur.id,card:s.cur.id.split(":")[0],due:now()+(180+Math.random()*60)*1000});next()},
+prac(){const ids=V.fin.wrong,cs=[...new Set(ids.map(i=>S.cards[i.split(":")[0]]).filter(Boolean))];V.quiz=null;V.fin=null;if(cs.length)newSession("review",cs,"Practice","review",ids.filter(i=>S.cards[i.split(":")[0]]));else render()},
+cancel(){G.stop=G.run;mclose();if(V.fr)V.fr()},
+aimo(){modal(`<div class="mh"><button class="ib" aria-label="Back" data-a="mclose">${ic("back")}</button><b>AI (BYOAI)</b><span style="width:44px"></span></div><label class="lb" for="ub">Base URL</label><input id="ub" class="inp" data-u="base" value="${esc(S.set.base)}" placeholder="https://api.openai.com/v1 or http://localhost:11434/v1" autocapitalize="off" autocomplete="off"><label class="lb" for="uk">API key</label><div class="loc"><input id="uk" type="password" class="inp" data-u="key" value="${esc(S.set.key)}" placeholder="API key (leave empty for local models)" autocomplete="off"><button class="ib" aria-label="Show or hide key" data-a="pwd">${ic("eye")}</button></div><small>Stored only on this device.</small><label class="lb" for="um">Model</label><div id="ms"></div><button class="lk" data-a="aiman">Type model name manually</button><div class="ac"><button class="b" data-a="fetch">Fetch</button><button class="b p" data-a="aisave">Save</button></div>`);modelBox()},
+aisave(){clearTimeout(ft);const b=$("#ub"),k=$("#uk"),m=$("#um");if(b)S.set.base=b.value.trim();if(k)S.set.key=k.value.trim();if(m&&m.value)S.set.model=m.value.trim();S.set.st="";save();mclose();render();note("AI settings saved","ok")},
+pwd(){const i=$("#uk");i.type=i.type==="password"?"text":"password"},
+aiman(){V.manual=!V.manual;modelBox()},fetch:fetchModels,
+about(){modal(`<h2>About Voca</h2><p><b>Created By:</b> Vibhor Kumar</p><p><b>Version:</b> ${VER}</p><p><b>Created For:</b> Learners</p><p><b>Purpose:</b> Learning using paper & pen? Time consuming? Save your time with this app that allows you to learn anything.</p><div class="ac"><button class="b" data-a="mclose">Close</button></div>`)},
+ndrop(e){dropN(e.dataset.id)},
+nmore(e){const n=NT.find(x=>x.id===e.dataset.id);if(!n)return;V.more=1;modal(`<p class="no" style="font-size:13px;word-break:break-word">${esc(n.t)}</p><div class="ac"><button class="b" data-a="mclose">Close</button></div>`)},
+nact(e){const n=NT.find(x=>x.id===e.dataset.id);dropN(e.dataset.id);if(n&&n.act)n.act.f()},
+reset(){V.quiz=null;V.sub=null;V.fin=null;render()}};
+function cardM(id,edit){const c=S.cards[id];if(!c)return;
+ modal(edit?`<div class="mh"><button class="ib" aria-label="Back" data-a="cview" data-id="${id}">${ic("back")}</button><b>Edit card</b><span style="width:44px"></span></div><label class="lb" for="cef">Front</label><textarea id="cef" class="inp" rows="3" data-ce="1" placeholder="Front (the question)">${esc(c.f)}</textarea><label class="lb" for="ceb">Back</label><textarea id="ceb" class="inp" rows="3" data-ce="1" placeholder="Back (the answer)">${esc(c.b)}</textarea><div class="ac" style="justify-content:center"><button id="ces" class="b p dimb" data-a="csave" data-id="${id}">Save</button></div>`
+ :`<small>Front</small><p style="font-weight:700;font-size:18px">${esc(c.f)}</p><small>Back</small><p>${esc(c.b)||"(no back)"}</p><div class="ac"><button class="b" data-a="cdel" data-id="${id}">Delete</button><button class="b p" data-a="cedit" data-id="${id}">Edit</button></div>`)}
+function parseImp(text,d){const lines=text.split(/\r?\n/).filter(x=>x.trim());if(lines.length&&/^"?front"?\s*[,;\t]\s*"?back"?$/i.test(lines[0].trim()))lines.shift();
+ const exist=new Set(dcards(d).map(c=>c.f+"\u0001"+c.b)),rows=[];let sk=0;
+ for(const l of lines.slice(0,2000)){let f,b;if(l.includes("\t")){const i=l.indexOf("\t");f=l.slice(0,i);b=l.slice(i+1)}else{const o=[];let cur="",q=false;for(let i=0;i<l.length;i++){const ch=l[i];if(q){if(ch==='"'){if(l[i+1]==='"'){cur+='"';i++}else q=false}else cur+=ch}else if(ch==='"')q=true;else if(ch===","||ch===";"){o.push(cur);cur=""}else cur+=ch}o.push(cur);f=o[0];b=o.slice(1).join(", ")}
+  f=(f||"").trim();b=(b||"").trim();const k=f+"\u0001"+b;if(!f||exist.has(k)){sk++;continue}exist.add(k);rows.push([f,b])}
+ return{rows,sk,over:Math.max(0,lines.length-2000)}}
+function impUpdate(text){const v=V.imp;if(!v)return;const r=parseImp(text,v.d);v.rows=r.rows;$("#ip").textContent=r.rows.length+" cards found, "+(r.sk+r.over)+" skipped";$("#ib").classList.toggle("dimb",!r.rows.length)}
+/* events */
+document.addEventListener("click",e=>{try{if(e.target.classList.contains("bd")){mclose();return}const el=e.target.closest("[data-a]");if(el&&A[el.dataset.a])A[el.dataset.a](el,e)}catch(x){note(safe(x),"error")}});
+document.addEventListener("input",e=>{const t=e.target;try{
+ if(t.dataset.d){let v=t.value;if(t.dataset.d==="dl"&&!v.startsWith("primary")){v="primary::";t.value=v}S.ui.d[t.dataset.d]=v;saveSoon()}
+ else if(t.dataset.u){if(t.dataset.u==="model"){S.set.model=t.value;S.set.st="";save();return}S.set[t.dataset.u]=t.value.trim();saveSoon();clearTimeout(ft);if(S.set.base.trim()&&(S.set.key||isLocal(base())))ft=setTimeout(fetchModels,1000)}
+ else if(t.dataset.ce){const c=S.cards[$("#ces").dataset.id];$("#ces").classList.toggle("dimb",$("#cef").value.trim()===c.f&&$("#ceb").value.trim()===c.b)}
+ else if(t.id==="fi")V.typed=t.value;else if(t.id==="it")impUpdate(t.value)}catch(x){note(safe(x),"error")}});
+document.addEventListener("change",e=>{const t=e.target;if(t.id==="if"&&t.files[0]){const r=new FileReader();r.onload=()=>{$("#it").value=String(r.result).slice(0,2e6);impUpdate($("#it").value)};r.onerror=()=>note("Could not read that file.","error");r.readAsText(t.files[0])}else if(t.dataset.u==="model"){S.set.model=t.value;S.set.st="";save();modelBox()}});
+document.addEventListener("keydown",e=>{if(e.key!=="Enter")return;const t=e.target;if(t.id==="dl"){e.preventDefault();if(!t.value.endsWith("::")){t.value+="::";S.ui.d.dl=t.value;save()}}else if(t.id==="fi"){e.preventDefault();A.chk()}});
+document.addEventListener("focusin",e=>{if(/INPUT|TEXTAREA/.test(e.target.tagName))setTimeout(()=>e.target.scrollIntoView({block:"center"}),300)});
+let ty=null;document.addEventListener("touchstart",e=>{ty=e.target.closest(".fc")?e.touches[0].clientY:null},{passive:true});
+document.addEventListener("touchend",e=>{if(ty!==null&&ty-e.changedTouches[0].clientY>50){A.flip();ty=null}},{passive:true});
+/* boot */
+if("serviceWorker" in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register("sw.js").catch(()=>{});
+guard();render();if(memOnly)note("Storage isn’t available here. Your data will be lost when you close the app.","error");
+</script></body></html>
